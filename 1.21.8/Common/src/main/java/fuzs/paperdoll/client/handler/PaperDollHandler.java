@@ -90,9 +90,8 @@ public class PaperDollHandler {
             return;
         }
 
-        Player player = minecraft.player;
-
-        if (!player.isInvisible() && !player.isSpectator()) {
+        if (!minecraft.options.hideGui && minecraft.player != null && !minecraft.player.isInvisible()
+                && !minecraft.player.isSpectator()) {
 
             ClientConfig config = PaperDoll.CONFIG.get(ClientConfig.class);
             if (minecraft.options.getCameraType().isFirstPerson() || !config.firstPersonOnly) {
@@ -114,7 +113,7 @@ public class PaperDollHandler {
                             rectangle.bottom(),
                             scale,
                             0.0F,
-                            player,
+                            minecraft.player,
                             partialTick);
                 }
             }
