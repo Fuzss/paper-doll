@@ -27,7 +27,8 @@ public class PaperDollHandler {
         ClientConfig config = PaperDoll.CONFIG.get(ClientConfig.class);
 
         // update display ticks
-        if (config.displayActions.stream().anyMatch(condition -> condition.isActive(minecraft.player, remainingRidingTicks))) {
+        if (config.displayActions.stream()
+                .anyMatch(condition -> condition.isActive(minecraft.player, remainingRidingTicks))) {
 
             remainingDisplayTicks = config.displayTime;
         } else if (remainingDisplayTicks > 0) {
@@ -59,7 +60,9 @@ public class PaperDollHandler {
         yRotOffsetO = yRotOffset;
 
         // apply rotation change from entity
-        yRotOffset = Mth.clamp(yRotOffset + (player.yHeadRot - player.yHeadRotO) * 0.5F, -MAX_ROTATION_DEGREES, MAX_ROTATION_DEGREES);
+        yRotOffset = Mth.clamp(yRotOffset + (player.yHeadRot - player.yHeadRotO) * 0.5F,
+                -MAX_ROTATION_DEGREES,
+                MAX_ROTATION_DEGREES);
         // rotate back to origin, never overshoot 0
         float nextYRotOffset = yRotOffset - yRotOffset / SPIN_BACK_SPEED;
 
@@ -78,7 +81,7 @@ public class PaperDollHandler {
     public static void onRenderGui(Minecraft minecraft, GuiGraphics guiGraphics, DeltaTracker deltaTracker) {
 
         minecraft.getProfiler().push("paperDoll");
-        if (!minecraft.player.isInvisible() && !minecraft.player.isSpectator()) {
+        if (!minecraft.options.hideGui && !minecraft.player.isInvisible() && !minecraft.player.isSpectator()) {
 
             ClientConfig config = PaperDoll.CONFIG.get(ClientConfig.class);
             if (minecraft.options.getCameraType().isFirstPerson() || !config.firstPersonOnly) {
@@ -89,14 +92,20 @@ public class PaperDollHandler {
                     int scale = config.scale * 5;
                     int posX = config.position.getX(0, guiGraphics.guiWidth(), (int) (scale * 1.5F) + config.offsetX);
                     // can't use PositionPreset#getY as the orientation point isn't in the top left corner of the image
-                    int posY = config.position.isBottom() ? guiGraphics.guiHeight() - scale - config.offsetY : (int) (scale * 2.5F) + config.offsetY;
+                    int posY = config.position.isBottom() ? guiGraphics.guiHeight() - scale - config.offsetY :
+                            (int) (scale * 2.5F) + config.offsetY;
                     posY -= scale - getCurrentHeightOffset(minecraft.player, partialTick) * scale;
                     if (config.potionShift) {
 
                         posY += config.position.getPotionShift(minecraft.player.getActiveEffects());
                     }
 
-                    PaperDollRenderer.renderEntityInInventoryUpdateRotations(guiGraphics, posX, posY, scale, minecraft.player, partialTick);
+                    PaperDollRenderer.renderEntityInInventoryUpdateRotations(guiGraphics,
+                            posX,
+                            posY,
+                            scale,
+                            minecraft.player,
+                            partialTick);
                 }
             }
         }
