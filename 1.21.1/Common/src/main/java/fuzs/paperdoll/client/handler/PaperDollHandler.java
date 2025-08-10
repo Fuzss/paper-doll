@@ -3,6 +3,7 @@ package fuzs.paperdoll.client.handler;
 import fuzs.paperdoll.PaperDoll;
 import fuzs.paperdoll.client.gui.PaperDollRenderer;
 import fuzs.paperdoll.config.ClientConfig;
+import fuzs.paperdoll.config.DisplayAction;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -27,8 +28,7 @@ public class PaperDollHandler {
         ClientConfig config = PaperDoll.CONFIG.get(ClientConfig.class);
 
         // update display ticks
-        if (config.displayActions.stream()
-                .anyMatch(condition -> condition.isActive(minecraft.player, remainingRidingTicks))) {
+        if (DisplayAction.isActive(config.displayActions, minecraft.player, remainingRidingTicks)) {
 
             remainingDisplayTicks = config.displayTime;
         } else if (remainingDisplayTicks > 0) {

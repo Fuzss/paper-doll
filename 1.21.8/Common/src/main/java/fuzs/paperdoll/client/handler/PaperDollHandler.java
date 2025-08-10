@@ -2,10 +2,9 @@ package fuzs.paperdoll.client.handler;
 
 import fuzs.paperdoll.PaperDoll;
 import fuzs.paperdoll.client.util.PaperDollRenderer;
-import fuzs.paperdoll.config.AnchorPoint;
 import fuzs.paperdoll.config.ClientConfig;
 import fuzs.paperdoll.config.DisplayAction;
-import fuzs.puzzleslib.api.core.v1.ModLoaderEnvironment;
+import fuzs.puzzleslib.api.client.gui.v2.AnchorPoint;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -84,11 +83,6 @@ public class PaperDollHandler {
 
         Profiler.get().push("paperDoll");
         Minecraft minecraft = Minecraft.getInstance();
-
-        // TODO remove again when rendering multiple entities of the same type on screen is fixed
-        if (ModLoaderEnvironment.INSTANCE.getModLoader().isFabricLike() && minecraft.screen != null) {
-            return;
-        }
 
         if (!minecraft.options.hideGui && minecraft.player != null && !minecraft.player.isInvisible()
                 && !minecraft.player.isSpectator()) {

@@ -1,6 +1,7 @@
 package fuzs.paperdoll.client.util;
 
 import fuzs.paperdoll.client.handler.PaperDollHandler;
+import fuzs.puzzleslib.api.client.renderer.v1.RenderPropertyKey;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
@@ -64,14 +65,9 @@ public class PaperDollRenderer {
         EntityRenderDispatcher entityRenderDispatcher = minecraft.getEntityRenderDispatcher();
         EntityRenderer<? super LivingEntity, S> entityRenderer = (EntityRenderer<? super LivingEntity, S>) entityRenderDispatcher.getRenderer(
                 livingEntity);
-        S entityRenderState;
-        // screens might render a player entity, we then need a separate render state
-        if (minecraft.screen != null) {
-            entityRenderState = entityRenderer.createRenderState();
-            entityRenderer.extractRenderState(livingEntity, entityRenderState, partialTick);
-        } else {
-            entityRenderState = entityRenderer.createRenderState(livingEntity, partialTick);
-        }
+        S entityRenderState = entityRenderer.createRenderState();
+        entityRenderer.extractRenderState(livingEntity, entityRenderState, partialTick);
+        RenderPropertyKey.onUpdateEntityRenderState(entityRenderer, livingEntity, entityRenderState, partialTick);
         entityRenderState.hitboxesRenderState = null;
         guiGraphics.submitEntityRenderState(entityRenderState,
                 scale,

@@ -1,16 +1,11 @@
 package fuzs.paperdoll.config;
 
-import fuzs.paperdoll.PaperDoll;
-import fuzs.paperdoll.client.gui.DisplayAction;
-import fuzs.paperdoll.client.gui.PositionPreset;
 import fuzs.puzzleslib.api.config.v3.Config;
 import fuzs.puzzleslib.api.config.v3.ConfigCore;
-import fuzs.puzzleslib.api.config.v3.serialization.ConfigDataSet;
-import fuzs.puzzleslib.api.config.v3.serialization.KeyedValueProvider;
-
-import java.util.List;
 
 public class ClientConfig implements ConfigCore {
+    @Config(description = "Display paper doll while performing these actions.")
+    public DisplayActions displayActions = new DisplayActions();
     @Config(description = "Scale of paper doll. Also affected by video settings gui scale.")
     @Config.IntRange(min = 1, max = 24)
     public int scale = 4;
@@ -29,38 +24,31 @@ public class ClientConfig implements ConfigCore {
     public boolean firstPersonOnly = true;
     @Config(description = "Set axis the player head can move on.")
     public ClientConfig.HeadMovement headMovement = HeadMovement.YAW;
-    public ConfigDataSet<DisplayAction> displayActions;
-    @Config(name = "display_actions", description = "Display paper doll while performing these actions.")
-    @Config.AllowedValues(values = {
-            "paperdoll:sprinting",
-            "paperdoll:swimming",
-            "paperdoll:crawling",
-            "paperdoll:crouching",
-            "paperdoll:flying",
-            "paperdoll:gliding",
-            "paperdoll:riding",
-            "paperdoll:spin_attacking",
-            "paperdoll:using"
-    }
-    )
-    List<String> displayActionsRaw = KeyedValueProvider.toString(DisplayAction.class,
-            PaperDoll.MOD_ID,
-            DisplayAction.SPRINTING,
-            DisplayAction.SWIMMING,
-            DisplayAction.CRAWLING,
-            DisplayAction.CROUCHING,
-            DisplayAction.FLYING,
-            DisplayAction.GLIDING
-    );
-
-    @Override
-    public void afterConfigReload() {
-        this.displayActions = ConfigDataSet.from(KeyedValueProvider.enumConstants(DisplayAction.class,
-                PaperDoll.MOD_ID
-        ), this.displayActionsRaw);
-    }
 
     public enum HeadMovement {
-        YAW, PITCH, BOTH
+        YAW,
+        PITCH,
+        BOTH
+    }
+
+    public static class DisplayActions implements ConfigCore {
+        @Config(description = "Display paper doll while sprinting.")
+        public boolean sprinting = true;
+        @Config(description = "Display paper doll while swimming in water.")
+        public boolean swimming = true;
+        @Config(description = "Display paper doll while crawling in a tight space.")
+        public boolean crawling = true;
+        @Config(description = "Display paper doll while crouching.")
+        public boolean crouching = true;
+        @Config(description = "Display paper doll while flying in creative mode.")
+        public boolean flying = true;
+        @Config(description = "Display paper doll while gliding using an elytra.")
+        public boolean gliding = true;
+        @Config(description = "Display paper doll while riding a vehicle.")
+        public boolean riding = true;
+        @Config(description = "Display paper doll while spin attacking with a trident.")
+        public boolean spinAttacking = true;
+        @Config(description = "Display paper doll while using an item like a bow.")
+        public boolean usingItem = true;
     }
 }
