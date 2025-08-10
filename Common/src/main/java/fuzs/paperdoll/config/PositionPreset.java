@@ -1,4 +1,4 @@
-package fuzs.paperdoll.client.gui;
+package fuzs.paperdoll.config;
 
 import net.minecraft.world.effect.MobEffectInstance;
 
