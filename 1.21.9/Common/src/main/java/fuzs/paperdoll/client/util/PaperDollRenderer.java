@@ -1,7 +1,6 @@
 package fuzs.paperdoll.client.util;
 
 import fuzs.paperdoll.client.handler.PaperDollHandler;
-import fuzs.puzzleslib.api.client.renderer.v1.RenderPropertyKey;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
@@ -61,14 +60,13 @@ public class PaperDollRenderer {
      *         int, int, float, Vector3f, Quaternionf, Quaternionf, LivingEntity)
      */
     public static <S extends EntityRenderState> void renderEntityInInventory(GuiGraphics guiGraphics, int x1, int y1, int x2, int y2, float scale, Vector3f translation, Quaternionf rotation, @Nullable Quaternionf overrideCameraAngle, LivingEntity livingEntity, float partialTick) {
-        Minecraft minecraft = Minecraft.getInstance();
-        EntityRenderDispatcher entityRenderDispatcher = minecraft.getEntityRenderDispatcher();
-        EntityRenderer<? super LivingEntity, S> entityRenderer = (EntityRenderer<? super LivingEntity, S>) entityRenderDispatcher.getRenderer(
-                livingEntity);
-        S entityRenderState = entityRenderer.createRenderState();
-        entityRenderer.extractRenderState(livingEntity, entityRenderState, partialTick);
-        RenderPropertyKey.onUpdateEntityRenderState(entityRenderer, livingEntity, entityRenderState, partialTick);
+        EntityRenderDispatcher entityRenderDispatcher = Minecraft.getInstance().getEntityRenderDispatcher();
+        EntityRenderer<? super LivingEntity, ?> entityRenderer = entityRenderDispatcher.getRenderer(livingEntity);
+        EntityRenderState entityRenderState = entityRenderer.createRenderState(livingEntity, partialTick);
+        entityRenderState.lightCoords = 15728880;
         entityRenderState.hitboxesRenderState = null;
+        entityRenderState.shadowPieces.clear();
+        entityRenderState.outlineColor = 0;
         guiGraphics.submitEntityRenderState(entityRenderState,
                 scale,
                 translation,
