@@ -1,5 +1,6 @@
 package fuzs.paperdoll.config;
 
+import fuzs.paperdoll.PaperDoll;
 import net.minecraft.world.entity.player.Player;
 
 public enum DisplayAction {
@@ -108,7 +109,7 @@ public enum DisplayAction {
         }
     };
 
-    static final DisplayAction[] VALUES = values();
+    private static final DisplayAction[] VALUES = values();
 
     abstract boolean isActionEnabled(ClientConfig.DisplayActions displayActions);
 
@@ -118,7 +119,8 @@ public enum DisplayAction {
         return remainingRidingTicks == 0 && this.isPerformingAction(player);
     }
 
-    public static boolean isActive(ClientConfig.DisplayActions displayActions, Player player, int remainingRidingTicks) {
+    public static boolean isActive(Player player, int remainingRidingTicks) {
+        ClientConfig.DisplayActions displayActions = PaperDoll.CONFIG.get(ClientConfig.class).displayActions;
         for (DisplayAction displayAction : VALUES) {
             if (displayAction.isActionEnabled(displayActions) && displayAction.isPerformingAction(player,
                     remainingRidingTicks)) {

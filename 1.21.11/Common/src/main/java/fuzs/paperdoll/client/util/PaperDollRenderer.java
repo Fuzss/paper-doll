@@ -5,10 +5,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.state.EntityRenderState;
+import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
-import org.jetbrains.annotations.Nullable;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
@@ -22,59 +21,39 @@ public class PaperDollRenderer {
         Quaternionf rotation = new Quaternionf().rotateZ(Mth.PI);
         Quaternionf overrideCameraAngle = new Quaternionf().rotateX(15.0F * Mth.DEG_TO_RAD);
         rotation.mul(overrideCameraAngle);
-        float xRot = livingEntity.getXRot();
-        float yRot = livingEntity.getYRot();
-        float xRotO = livingEntity.xRotO;
-        float yRotO = livingEntity.yRotO;
-        float yBodyRot = livingEntity.yBodyRot;
-        float yBodyRotO = livingEntity.yBodyRotO;
-        float yHeadRot = livingEntity.yHeadRot;
-        float yHeadRotO = livingEntity.yHeadRotO;
-        PaperDollHandler.applyEntityRotations(livingEntity);
-        float entityScale = livingEntity.getScale();
-        Vector3f vector3f = new Vector3f(0.0F, livingEntity.getBbHeight() / 2.0F + yOffset * entityScale, 0.0F);
-        float relativeScale = scale / entityScale;
-        renderEntityInInventory(guiGraphics,
-                x1,
-                y1,
-                x2,
-                y2,
-                relativeScale,
-                vector3f,
-                rotation,
-                overrideCameraAngle,
-                livingEntity,
-                partialTick);
-        livingEntity.setXRot(xRot);
-        livingEntity.setYRot(yRot);
-        livingEntity.xRotO = xRotO;
-        livingEntity.yRotO = yRotO;
-        livingEntity.yBodyRot = yBodyRot;
-        livingEntity.yBodyRotO = yBodyRotO;
-        livingEntity.yHeadRot = yHeadRot;
-        livingEntity.yHeadRotO = yHeadRotO;
-    }
-
-    /**
-     * @see net.minecraft.client.gui.screens.inventory.InventoryScreen#renderEntityInInventory(GuiGraphics, int, int,
-     *         int, int, float, Vector3f, Quaternionf, Quaternionf, LivingEntity)
-     */
-    public static <S extends EntityRenderState> void renderEntityInInventory(GuiGraphics guiGraphics, int x1, int y1, int x2, int y2, float scale, Vector3f translation, Quaternionf rotation, @Nullable Quaternionf overrideCameraAngle, LivingEntity livingEntity, float partialTick) {
-        EntityRenderDispatcher entityRenderDispatcher = Minecraft.getInstance().getEntityRenderDispatcher();
-        EntityRenderer<? super LivingEntity, ?> entityRenderer = entityRenderDispatcher.getRenderer(livingEntity);
-        EntityRenderState entityRenderState = entityRenderer.createRenderState(livingEntity, partialTick);
-        entityRenderState.lightCoords = 15728880;
-        entityRenderState.hitboxesRenderState = null;
-        entityRenderState.shadowPieces.clear();
-        entityRenderState.outlineColor = 0;
-        guiGraphics.submitEntityRenderState(entityRenderState,
+        LivingEntityRenderState livingEntityRenderState = extractRenderState(livingEntity, partialTick);
+        livingEntityRenderState.bodyRot = 180.0F + PaperDollHandler.getDefaultRotationDegrees();
+        livingEntityRenderState.xRot = PaperDollHandler.getEntityXRot(livingEntityRenderState);
+        livingEntityRenderState.yRot = PaperDollHandler.getEntityYRot(partialTick);
+        livingEntityRenderState.boundingBoxWidth =
+                livingEntityRenderState.boundingBoxWidth / livingEntityRenderState.scale;
+        livingEntityRenderState.boundingBoxHeight =
+                livingEntityRenderState.boundingBoxHeight / livingEntityRenderState.scale;
+        livingEntityRenderState.scale = 1.0F;
+        Vector3f vector3f = new Vector3f(0.0F, livingEntityRenderState.boundingBoxHeight / 2.0F + yOffset, 0.0F);
+        guiGraphics.submitEntityRenderState(livingEntityRenderState,
                 scale,
-                translation,
+                vector3f,
                 rotation,
                 overrideCameraAngle,
                 x1,
                 y1,
                 x2,
                 y2);
+    }
+
+    /**
+     * @see net.minecraft.client.gui.screens.inventory.InventoryScreen#extractRenderState(LivingEntity)
+     */
+    private static LivingEntityRenderState extractRenderState(LivingEntity livingEntity, float partialTick) {
+        EntityRenderDispatcher entityRenderDispatcher = Minecraft.getInstance().getEntityRenderDispatcher();
+        EntityRenderer<? super LivingEntity, ?> entityRenderer = entityRenderDispatcher.getRenderer(livingEntity);
+        LivingEntityRenderState livingEntityRenderState = (LivingEntityRenderState) entityRenderer.createRenderState(
+                livingEntity,
+                partialTick);
+        livingEntityRenderState.lightCoords = 15728880;
+        livingEntityRenderState.shadowPieces.clear();
+        livingEntityRenderState.outlineColor = 0;
+        return livingEntityRenderState;
     }
 }
