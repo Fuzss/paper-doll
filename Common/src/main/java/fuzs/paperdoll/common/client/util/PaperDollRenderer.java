@@ -1,6 +1,6 @@
-package fuzs.paperdoll.client.util;
+package fuzs.paperdoll.common.client.util;
 
-import fuzs.paperdoll.client.handler.PaperDollHandler;
+import fuzs.paperdoll.common.client.handler.PaperDollHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;

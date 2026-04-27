@@ -1,7 +1,7 @@
-package fuzs.paperdoll.client;
+package fuzs.paperdoll.common.client;
 
-import fuzs.paperdoll.PaperDoll;
-import fuzs.paperdoll.client.handler.PaperDollHandler;
+import fuzs.paperdoll.common.PaperDoll;
+import fuzs.paperdoll.common.client.handler.PaperDollHandler;
 import fuzs.puzzleslib.common.api.client.core.v1.ClientModConstructor;
 import fuzs.puzzleslib.common.api.client.core.v1.context.GuiLayersContext;
 import fuzs.puzzleslib.common.api.client.event.v1.ClientTickEvents;

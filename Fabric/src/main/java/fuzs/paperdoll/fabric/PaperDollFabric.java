@@ -1,6 +1,6 @@
 package fuzs.paperdoll.fabric;
 
-import fuzs.paperdoll.PaperDoll;
+import fuzs.paperdoll.common.PaperDoll;
 import fuzs.puzzleslib.common.api.core.v1.ModConstructor;
 import net.fabricmc.api.ModInitializer;
 

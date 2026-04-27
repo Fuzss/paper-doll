@@ -1,6 +1,6 @@
-package fuzs.paperdoll.config;
+package fuzs.paperdoll.common.config;
 
-import fuzs.paperdoll.PaperDoll;
+import fuzs.paperdoll.common.PaperDoll;
 import net.minecraft.world.entity.player.Player;
 
 public enum DisplayAction {

@@ -1,9 +1,8 @@
-package fuzs.paperdoll;
+package fuzs.paperdoll.common;
 
-import fuzs.paperdoll.config.ClientConfig;
+import fuzs.paperdoll.common.config.ClientConfig;
 import fuzs.puzzleslib.common.api.config.v3.ConfigHolder;
 import fuzs.puzzleslib.common.api.core.v1.ModConstructor;
-import net.minecraft.resources.Identifier;
 import net.minecraft.resources.Identifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

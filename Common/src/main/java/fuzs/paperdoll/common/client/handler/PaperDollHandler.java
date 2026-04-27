@@ -1,9 +1,9 @@
-package fuzs.paperdoll.client.handler;
+package fuzs.paperdoll.common.client.handler;
 
-import fuzs.paperdoll.PaperDoll;
-import fuzs.paperdoll.client.util.PaperDollRenderer;
-import fuzs.paperdoll.config.ClientConfig;
-import fuzs.paperdoll.config.DisplayAction;
+import fuzs.paperdoll.common.PaperDoll;
+import fuzs.paperdoll.common.client.util.PaperDollRenderer;
+import fuzs.paperdoll.common.config.ClientConfig;
+import fuzs.paperdoll.common.config.DisplayAction;
 import fuzs.puzzleslib.common.api.client.gui.v2.AnchorPoint;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;

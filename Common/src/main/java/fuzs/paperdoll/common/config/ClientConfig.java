@@ -1,4 +1,4 @@
-package fuzs.paperdoll.config;
+package fuzs.paperdoll.common.config;
 
 import fuzs.puzzleslib.common.api.client.gui.v2.AnchorPoint;
 import fuzs.puzzleslib.common.api.config.v3.Config;
