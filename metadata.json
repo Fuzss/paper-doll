@@ -1,9 +1,10 @@
 {
+    "minecraft": "26.1.2",
     "mod": {
         "id": "paperdoll",
         "group": "fuzs.paperdoll",
         "name": "Paper Doll",
-        "version": "21.11.0",
+        "version": "26.1.0",
         "authors": [
             "Fuzs"
         ],
@@ -36,13 +37,13 @@
     ],
     "links": [
         {
-            "name": "github",
-            "slug": "paperdoll"
-        },
-        {
             "name": "curseforge",
             "slug": "paper-doll",
             "id": "857970"
+        },
+        {
+            "name": "github",
+            "slug": "paper-doll"
         },
         {
             "name": "modrinth",

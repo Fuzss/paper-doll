@@ -1,8 +1,8 @@
 package fuzs.paperdoll.config;
 
-import fuzs.puzzleslib.api.client.gui.v2.AnchorPoint;
-import fuzs.puzzleslib.api.config.v3.Config;
-import fuzs.puzzleslib.api.config.v3.ConfigCore;
+import fuzs.puzzleslib.common.api.client.gui.v2.AnchorPoint;
+import fuzs.puzzleslib.common.api.config.v3.Config;
+import fuzs.puzzleslib.common.api.config.v3.ConfigCore;
 
 public class ClientConfig implements ConfigCore {
     @Config(description = "Display paper doll while performing these actions.")

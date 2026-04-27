@@ -4,10 +4,10 @@ import fuzs.paperdoll.PaperDoll;
 import fuzs.paperdoll.client.util.PaperDollRenderer;
 import fuzs.paperdoll.config.ClientConfig;
 import fuzs.paperdoll.config.DisplayAction;
-import fuzs.puzzleslib.api.client.gui.v2.AnchorPoint;
+import fuzs.puzzleslib.common.api.client.gui.v2.AnchorPoint;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.util.Mth;
@@ -71,7 +71,7 @@ public class PaperDollHandler {
         }
     }
 
-    public static void renderPaperDoll(GuiGraphics guiGraphics, DeltaTracker deltaTracker) {
+    public static void renderPaperDoll(GuiGraphicsExtractor guiGraphics, DeltaTracker deltaTracker) {
         Profiler.get().push("paperDoll");
         Minecraft minecraft = Minecraft.getInstance();
         if (!minecraft.options.hideGui && minecraft.player != null && !minecraft.player.isInvisible()

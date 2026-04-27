@@ -2,7 +2,7 @@ package fuzs.paperdoll.client.util;
 
 import fuzs.paperdoll.client.handler.PaperDollHandler;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
@@ -14,10 +14,10 @@ import org.joml.Vector3f;
 public class PaperDollRenderer {
 
     /**
-     * @see net.minecraft.client.gui.screens.inventory.InventoryScreen#renderEntityInInventoryFollowsMouse(GuiGraphics,
+     * @see net.minecraft.client.gui.screens.inventory.InventoryScreen#extractEntityInInventoryFollowsMouse(GuiGraphicsExtractor,
      *         int, int, int, int, int, float, float, float, LivingEntity)
      */
-    public static void renderEntityInInventory(GuiGraphics guiGraphics, int x1, int y1, int x2, int y2, int scale, float yOffset, LivingEntity livingEntity, float partialTick) {
+    public static void renderEntityInInventory(GuiGraphicsExtractor guiGraphics, int x1, int y1, int x2, int y2, int scale, float yOffset, LivingEntity livingEntity, float partialTick) {
         Quaternionf rotation = new Quaternionf().rotateZ(Mth.PI);
         Quaternionf overrideCameraAngle = new Quaternionf().rotateX(15.0F * Mth.DEG_TO_RAD);
         rotation.mul(overrideCameraAngle);
@@ -31,15 +31,7 @@ public class PaperDollRenderer {
                 livingEntityRenderState.boundingBoxHeight / livingEntityRenderState.scale;
         livingEntityRenderState.scale = 1.0F;
         Vector3f vector3f = new Vector3f(0.0F, livingEntityRenderState.boundingBoxHeight / 2.0F + yOffset, 0.0F);
-        guiGraphics.submitEntityRenderState(livingEntityRenderState,
-                scale,
-                vector3f,
-                rotation,
-                overrideCameraAngle,
-                x1,
-                y1,
-                x2,
-                y2);
+        guiGraphics.entity(livingEntityRenderState, scale, vector3f, rotation, overrideCameraAngle, x1, y1, x2, y2);
     }
 
     /**

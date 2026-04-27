@@ -2,9 +2,9 @@ package fuzs.paperdoll.client;
 
 import fuzs.paperdoll.PaperDoll;
 import fuzs.paperdoll.client.handler.PaperDollHandler;
-import fuzs.puzzleslib.api.client.core.v1.ClientModConstructor;
-import fuzs.puzzleslib.api.client.core.v1.context.GuiLayersContext;
-import fuzs.puzzleslib.api.client.event.v1.ClientTickEvents;
+import fuzs.puzzleslib.common.api.client.core.v1.ClientModConstructor;
+import fuzs.puzzleslib.common.api.client.core.v1.context.GuiLayersContext;
+import fuzs.puzzleslib.common.api.client.event.v1.ClientTickEvents;
 
 public class PaperDollClient implements ClientModConstructor {
 
