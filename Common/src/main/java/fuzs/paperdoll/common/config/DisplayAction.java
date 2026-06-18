@@ -11,7 +11,7 @@ public enum DisplayAction {
         }
 
         @Override
-        boolean isPerformingAction(Player player) {
+        boolean isPerformingAction(Player player, boolean isRiding) {
             return player.canSpawnSprintParticle();
         }
     },
@@ -22,7 +22,7 @@ public enum DisplayAction {
         }
 
         @Override
-        boolean isPerformingAction(Player player) {
+        boolean isPerformingAction(Player player, boolean isRiding) {
             return !player.isVisuallyCrawling() && player.isVisuallySwimming() && player.getSwimAmount(1.0F) > 0.0F;
         }
     },
@@ -33,7 +33,7 @@ public enum DisplayAction {
         }
 
         @Override
-        boolean isPerformingAction(Player player) {
+        boolean isPerformingAction(Player player, boolean isRiding) {
             return player.isVisuallyCrawling();
         }
     },
@@ -44,13 +44,8 @@ public enum DisplayAction {
         }
 
         @Override
-        boolean isPerformingAction(Player player, int remainingRidingTicks) {
-            return this.isPerformingAction(player);
-        }
-
-        @Override
-        boolean isPerformingAction(Player player) {
-            return player.isCrouching();
+        boolean isPerformingAction(Player player, boolean isRiding) {
+            return !isRiding && player.isCrouching();
         }
     },
     FLYING {
@@ -60,7 +55,7 @@ public enum DisplayAction {
         }
 
         @Override
-        boolean isPerformingAction(Player player) {
+        boolean isPerformingAction(Player player, boolean isRiding) {
             return player.getAbilities().flying;
         }
     },
@@ -71,7 +66,7 @@ public enum DisplayAction {
         }
 
         @Override
-        boolean isPerformingAction(Player player) {
+        boolean isPerformingAction(Player player, boolean isRiding) {
             return player.isFallFlying();
         }
     },
@@ -82,7 +77,7 @@ public enum DisplayAction {
         }
 
         @Override
-        boolean isPerformingAction(Player player) {
+        boolean isPerformingAction(Player player, boolean isRiding) {
             return player.isPassenger();
         }
     },
@@ -93,7 +88,7 @@ public enum DisplayAction {
         }
 
         @Override
-        boolean isPerformingAction(Player player) {
+        boolean isPerformingAction(Player player, boolean isRiding) {
             return player.isAutoSpinAttack();
         }
     },
@@ -104,7 +99,7 @@ public enum DisplayAction {
         }
 
         @Override
-        boolean isPerformingAction(Player player) {
+        boolean isPerformingAction(Player player, boolean isRiding) {
             return player.isUsingItem();
         }
     };
@@ -113,17 +108,12 @@ public enum DisplayAction {
 
     abstract boolean isActionEnabled(ClientConfig.DisplayActions displayActions);
 
-    abstract boolean isPerformingAction(Player player);
+    abstract boolean isPerformingAction(Player player, boolean isRiding);
 
-    boolean isPerformingAction(Player player, int remainingRidingTicks) {
-        return remainingRidingTicks == 0 && this.isPerformingAction(player);
-    }
-
-    public static boolean isActive(Player player, int remainingRidingTicks) {
+    public static boolean isActive(Player player, boolean isRiding) {
         ClientConfig.DisplayActions displayActions = PaperDoll.CONFIG.get(ClientConfig.class).displayActions;
         for (DisplayAction displayAction : VALUES) {
-            if (displayAction.isActionEnabled(displayActions) && displayAction.isPerformingAction(player,
-                    remainingRidingTicks)) {
+            if (displayAction.isActionEnabled(displayActions) && displayAction.isPerformingAction(player, isRiding)) {
                 return true;
             }
         }

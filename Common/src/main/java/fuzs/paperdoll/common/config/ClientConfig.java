@@ -24,6 +24,10 @@ public class ClientConfig implements ConfigCore {
     @Config(description = "Set axis the player head can move on.")
     public ClientConfig.HeadMovement headMovement = HeadMovement.YAW;
 
+    public boolean isAlwaysDisplayed() {
+        return this.displayTime == 0;
+    }
+
     public enum HeadMovement {
         YAW,
         PITCH,
