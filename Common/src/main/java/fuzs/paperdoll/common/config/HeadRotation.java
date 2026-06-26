@@ -1,6 +1,6 @@
 package fuzs.paperdoll.common.config;
 
-public enum HeadMovement {
+public enum HeadRotation {
     YAW,
     PITCH,
     BOTH;
