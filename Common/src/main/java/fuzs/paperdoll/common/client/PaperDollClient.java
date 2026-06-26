@@ -21,6 +21,6 @@ public class PaperDollClient implements ClientModConstructor {
     public void onRegisterGuiLayers(GuiLayersContext context) {
         context.registerGuiLayer(PaperDoll.id("paper_doll"),
                 GuiLayersContext.SLEEP_OVERLAY,
-                PaperDollHandler::renderPaperDoll);
+                PaperDollHandler::extractPaperDoll);
     }
 }
