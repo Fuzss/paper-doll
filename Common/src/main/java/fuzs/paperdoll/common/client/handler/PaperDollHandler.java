@@ -19,7 +19,7 @@ public class PaperDollHandler {
     private static final float SPIN_BACK_SPEED = 10.0F;
 
     private static int remainingDisplayTicks;
-    private static int remainingRidingTicks;
+    private static int ticksSinceLastRidden;
     private static float yRotOffset;
     private static float yRotOffsetO;
 
@@ -29,25 +29,29 @@ public class PaperDollHandler {
         }
 
         // update display ticks
-        int displayTime = PaperDoll.CONFIG.get(ClientConfig.class).displayTime;
-        if (DisplayAction.isActive(minecraft.player, remainingRidingTicks)) {
-            remainingDisplayTicks = displayTime;
-        } else if (remainingDisplayTicks > 0) {
-            remainingDisplayTicks--;
+        boolean alwaysDisplayed = PaperDoll.CONFIG.get(ClientConfig.class).isAlwaysDisplayed();
+        if (!alwaysDisplayed) {
+            int displayTime = PaperDoll.CONFIG.get(ClientConfig.class).displayTime;
+            int maxTicksSinceLastRidden = Math.max(0, displayTime - 1);
+            if (DisplayAction.isActive(minecraft.player, ticksSinceLastRidden < maxTicksSinceLastRidden)) {
+                remainingDisplayTicks = displayTime;
+            } else if (remainingDisplayTicks > 0) {
+                remainingDisplayTicks--;
+            }
+
+            // don't show paper doll in sneaking position after unmounting a vehicle / mount
+            if (minecraft.player.isPassenger()) {
+                ticksSinceLastRidden = 0;
+            } else if (ticksSinceLastRidden < maxTicksSinceLastRidden) {
+                ticksSinceLastRidden++;
+            }
         }
 
         // reset rotation when no longer shown
-        if (remainingDisplayTicks > 0 || displayTime == 0) {
+        if (remainingDisplayTicks > 0 || alwaysDisplayed) {
             tickYRotOffset(minecraft.player);
         } else {
             yRotOffset = yRotOffsetO = 0;
-        }
-
-        // don't show paper doll in sneaking position after unmounting a vehicle / mount
-        if (minecraft.player.isPassenger()) {
-            remainingRidingTicks = Math.max(0, displayTime - 2);
-        } else if (remainingRidingTicks > 0) {
-            remainingRidingTicks--;
         }
     }
 
@@ -77,7 +81,7 @@ public class PaperDollHandler {
                 && !minecraft.player.isSpectator()) {
             ClientConfig config = PaperDoll.CONFIG.get(ClientConfig.class);
             if (minecraft.options.getCameraType().isFirstPerson() || !config.firstPersonOnly) {
-                if (remainingDisplayTicks > 0 || config.displayTime == 0) {
+                if (remainingDisplayTicks > 0 || config.isAlwaysDisplayed()) {
                     float partialTick = deltaTracker.getGameTimeDeltaPartialTick(false);
                     int scale = config.scale * 5;
                     int size = scale * 7 / 2;
