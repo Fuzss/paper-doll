@@ -22,12 +22,10 @@ public class ClientConfig implements ConfigCore {
     @Config(description = "Only show paper doll when in first-person mode.")
     public boolean firstPersonOnly = true;
     @Config(description = "Set axis the player head can move on.")
-    public ClientConfig.HeadMovement headMovement = HeadMovement.YAW;
+    public HeadMovement headMovement = HeadMovement.YAW;
 
-    public enum HeadMovement {
-        YAW,
-        PITCH,
-        BOTH
+    public boolean isAlwaysDisplayed() {
+        return this.displayTime == 0;
     }
 
     public static class DisplayActions implements ConfigCore {

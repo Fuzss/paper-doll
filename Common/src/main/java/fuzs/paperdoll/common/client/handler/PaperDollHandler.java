@@ -71,7 +71,7 @@ public class PaperDollHandler {
         }
     }
 
-    public static void renderPaperDoll(GuiGraphicsExtractor guiGraphics, DeltaTracker deltaTracker) {
+    public static void extractPaperDoll(GuiGraphicsExtractor guiGraphics, DeltaTracker deltaTracker) {
         Profiler.get().push("paperDoll");
         Minecraft minecraft = Minecraft.getInstance();
         if (!minecraft.options.hideGui && minecraft.player != null && !minecraft.player.isInvisible()
@@ -87,7 +87,7 @@ public class PaperDollHandler {
                             size,
                             size);
                     ScreenRectangle rectangle = positioner.getRectangle(config.offsetX, config.offsetY);
-                    PaperDollRenderer.renderEntityInInventory(guiGraphics,
+                    PaperDollRenderer.extractEntityInInventory(guiGraphics,
                             rectangle.left(),
                             rectangle.top(),
                             rectangle.right(),
@@ -108,18 +108,17 @@ public class PaperDollHandler {
         return isRight ? DEFAULT_ROTATION_DEGREES : -DEFAULT_ROTATION_DEGREES;
     }
 
-    public static float getEntityXRot(LivingEntityRenderState livingEntityRenderState) {
+    public static float getEntityXRot(LivingEntityRenderState state) {
         // head rotation is used for doll rotation as it updates a lot more precisely than the body rotation
-        if (PaperDoll.CONFIG.get(ClientConfig.class).headMovement == ClientConfig.HeadMovement.YAW
-                || livingEntityRenderState.pose == Pose.FALL_FLYING) {
+        if (!PaperDoll.CONFIG.get(ClientConfig.class).headMovement.pitch() || state.pose == Pose.FALL_FLYING) {
             return 7.5F;
         } else {
-            return 0.0F;
+            return state.xRot;
         }
     }
 
     public static float getEntityYRot(float partialTick) {
-        if (PaperDoll.CONFIG.get(ClientConfig.class).headMovement != ClientConfig.HeadMovement.PITCH) {
+        if (PaperDoll.CONFIG.get(ClientConfig.class).headMovement.yaw()) {
             return Mth.rotLerp(partialTick, yRotOffsetO, yRotOffset);
         } else {
             return 0.0F;

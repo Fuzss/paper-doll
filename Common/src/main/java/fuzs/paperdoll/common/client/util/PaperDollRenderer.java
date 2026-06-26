@@ -17,21 +17,19 @@ public class PaperDollRenderer {
      * @see net.minecraft.client.gui.screens.inventory.InventoryScreen#extractEntityInInventoryFollowsMouse(GuiGraphicsExtractor,
      *         int, int, int, int, int, float, float, float, LivingEntity)
      */
-    public static void renderEntityInInventory(GuiGraphicsExtractor guiGraphics, int x1, int y1, int x2, int y2, int scale, float yOffset, LivingEntity livingEntity, float partialTick) {
+    public static void extractEntityInInventory(GuiGraphicsExtractor guiGraphics, int x1, int y1, int x2, int y2, int scale, float yOffset, LivingEntity livingEntity, float partialTick) {
         Quaternionf rotation = new Quaternionf().rotateZ(Mth.PI);
         Quaternionf overrideCameraAngle = new Quaternionf().rotateX(15.0F * Mth.DEG_TO_RAD);
         rotation.mul(overrideCameraAngle);
-        LivingEntityRenderState livingEntityRenderState = extractRenderState(livingEntity, partialTick);
-        livingEntityRenderState.bodyRot = 180.0F + PaperDollHandler.getDefaultRotationDegrees();
-        livingEntityRenderState.xRot = PaperDollHandler.getEntityXRot(livingEntityRenderState);
-        livingEntityRenderState.yRot = PaperDollHandler.getEntityYRot(partialTick);
-        livingEntityRenderState.boundingBoxWidth =
-                livingEntityRenderState.boundingBoxWidth / livingEntityRenderState.scale;
-        livingEntityRenderState.boundingBoxHeight =
-                livingEntityRenderState.boundingBoxHeight / livingEntityRenderState.scale;
-        livingEntityRenderState.scale = 1.0F;
-        Vector3f vector3f = new Vector3f(0.0F, livingEntityRenderState.boundingBoxHeight / 2.0F + yOffset, 0.0F);
-        guiGraphics.entity(livingEntityRenderState, scale, vector3f, rotation, overrideCameraAngle, x1, y1, x2, y2);
+        LivingEntityRenderState state = extractRenderState(livingEntity, partialTick);
+        state.bodyRot = 180.0F + PaperDollHandler.getDefaultRotationDegrees();
+        state.xRot = PaperDollHandler.getEntityXRot(state);
+        state.yRot = PaperDollHandler.getEntityYRot(partialTick);
+        state.boundingBoxWidth = state.boundingBoxWidth / state.scale;
+        state.boundingBoxHeight = state.boundingBoxHeight / state.scale;
+        state.scale = 1.0F;
+        Vector3f vector3f = new Vector3f(0.0F, state.boundingBoxHeight / 2.0F + yOffset, 0.0F);
+        guiGraphics.entity(state, scale, vector3f, rotation, overrideCameraAngle, x1, y1, x2, y2);
     }
 
     /**
