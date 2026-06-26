@@ -16,8 +16,6 @@ import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
 
 public class PaperDollHandler {
-    private static final float MAX_ROTATION_DEGREES = 30.0F;
-    private static final float DEFAULT_ROTATION_DEGREES = MAX_ROTATION_DEGREES / 2.0F;
     private static final float SPIN_BACK_SPEED = 10.0F;
 
     private static int remainingDisplayTicks;
@@ -55,19 +53,20 @@ public class PaperDollHandler {
 
     private static void tickYRotOffset(Player player) {
         yRotOffsetO = yRotOffset;
-        // apply rotation change from entity
+        // Apply rotation change from original entity.
+        float maxRotationDegrees = (float) PaperDoll.CONFIG.get(ClientConfig.class).headMovement.maximumRotation;
         yRotOffset = Mth.clamp(yRotOffset + (player.yHeadRot - player.yHeadRotO) * 0.5F,
-                -MAX_ROTATION_DEGREES,
-                MAX_ROTATION_DEGREES);
+                -maxRotationDegrees,
+                maxRotationDegrees);
 
-        // rotate back to origin, never overshoot 0
-        float nextYRotOffset = yRotOffset - yRotOffset / SPIN_BACK_SPEED;
-        if (yRotOffset < 0.0F) {
-            yRotOffset = Math.min(0, nextYRotOffset);
-        } else if (yRotOffset > 0.0F) {
-            yRotOffset = Math.max(0, nextYRotOffset);
-        } else {
-            yRotOffset = 0.0F;
+        // Rotate back to origin; never overshoot zero.
+        if (yRotOffset != 0.0F) {
+            float nextYRotOffset = yRotOffset - (yRotOffset / SPIN_BACK_SPEED);
+            if (yRotOffset < 0.0F) {
+                yRotOffset = Math.min(0.0F, nextYRotOffset);
+            } else if (yRotOffset > 0.0F) {
+                yRotOffset = Math.max(0.0F, nextYRotOffset);
+            }
         }
     }
 
@@ -105,12 +104,13 @@ public class PaperDollHandler {
 
     public static float getDefaultRotationDegrees() {
         boolean isRight = PaperDoll.CONFIG.get(ClientConfig.class).anchorPoint.isRight();
-        return isRight ? DEFAULT_ROTATION_DEGREES : -DEFAULT_ROTATION_DEGREES;
+        float defaultRotationDegrees = (float) PaperDoll.CONFIG.get(ClientConfig.class).headMovement.defaultRotation;
+        return isRight ? defaultRotationDegrees : -defaultRotationDegrees;
     }
 
     public static float getEntityXRot(LivingEntityRenderState state) {
-        // head rotation is used for doll rotation as it updates a lot more precisely than the body rotation
-        if (!PaperDoll.CONFIG.get(ClientConfig.class).headMovement.pitch() || state.pose == Pose.FALL_FLYING) {
+        if (!PaperDoll.CONFIG.get(ClientConfig.class).headMovement.rotationAxis.pitch()
+                || state.pose == Pose.FALL_FLYING) {
             return 7.5F;
         } else {
             return state.xRot;
@@ -118,7 +118,8 @@ public class PaperDollHandler {
     }
 
     public static float getEntityYRot(float partialTick) {
-        if (PaperDoll.CONFIG.get(ClientConfig.class).headMovement.yaw()) {
+        // The head rotation is used for doll rotation as it updates a lot more precisely than the body rotation.
+        if (PaperDoll.CONFIG.get(ClientConfig.class).headMovement.rotationAxis.yaw()) {
             return Mth.rotLerp(partialTick, yRotOffsetO, yRotOffset);
         } else {
             return 0.0F;
