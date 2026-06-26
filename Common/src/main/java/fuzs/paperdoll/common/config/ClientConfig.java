@@ -58,8 +58,5 @@ public class ClientConfig implements ConfigCore {
         @Config(description = "The maximum position in degrees away from the default position the paper doll head can be moved to.")
         @Config.DoubleRange(min = 0.0, max = 90.0)
         public double maximumRotation = 30.0;
-        @Config(description = "The speed modifier for rotating the paper doll head back towards the default position.")
-        @Config.DoubleRange(min = 1.0, max = 100.0)
-        public double rotateBackSpeed = 10.0;
     }
 }
