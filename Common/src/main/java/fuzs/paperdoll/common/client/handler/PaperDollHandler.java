@@ -58,10 +58,10 @@ public class PaperDollHandler {
     private static void tickYRotOffset(Player player) {
         yRotOffsetO = yRotOffset;
         // Apply rotation change from original entity.
-        float maxRotationDegrees = (float) PaperDoll.CONFIG.get(ClientConfig.class).headMovement.maximumRotation;
+        float maxRotationYaw = (float) PaperDoll.CONFIG.get(ClientConfig.class).headMovement.maxRotationYaw;
         yRotOffset = Mth.clamp(yRotOffset + (player.yHeadRot - player.yHeadRotO) * 0.5F,
-                -maxRotationDegrees,
-                maxRotationDegrees);
+                -maxRotationYaw,
+                maxRotationYaw);
 
         // Rotate back to origin; never overshoot zero.
         if (yRotOffset != 0.0F) {
@@ -117,7 +117,8 @@ public class PaperDollHandler {
                 || state.pose == Pose.FALL_FLYING) {
             return 7.5F;
         } else {
-            return state.xRot;
+            float maxRotationPitch = (float) PaperDoll.CONFIG.get(ClientConfig.class).headMovement.maxRotationPitch;
+            return Math.clamp(state.xRot, -maxRotationPitch, maxRotationPitch);
         }
     }
 
