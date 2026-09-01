@@ -6,11 +6,17 @@
     "26.1.x": "maintained",
     "26.2.x": "primary"
   },
-  "properties": {
-    "distributions.curseforge.id": "857970",
-    "distributions.curseforge.slug": "paper-doll",
-    "distributions.github.slug": "paper-doll",
-    "distributions.modrinth.id": "hD0W2Wde",
-    "distributions.modrinth.slug": "paper-doll"
+  "distributions": {
+    "curseforge": {
+      "id": "857970",
+      "slug": "paper-doll"
+    },
+    "github": {
+      "slug": "paper-doll"
+    },
+    "modrinth": {
+      "id": "hD0W2Wde",
+      "slug": "paper-doll"
+    }
   }
 }
