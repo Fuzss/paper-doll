@@ -44,8 +44,11 @@ public class PaperDollRenderer {
     private static LivingEntityRenderState extractCustomRenderState(LivingEntity livingEntity, float partialTick) {
         LivingEntityRenderState state = extractRenderState(livingEntity, partialTick);
         state.lightCoords = LightCoordsUtil.FULL_BRIGHT;
-        float modelAlpha = (float) PaperDoll.CONFIG.get(ClientConfig.class).modelTransparency;
-        RenderStateExtraData.set(state, MODEL_ALPHA_KEY, OptionalInt.of(ARGB.as8BitChannel(modelAlpha)));
+        double alpha = PaperDoll.CONFIG.get(ClientConfig.class).modelTransparency;
+        if (alpha < 1.0) {
+            RenderStateExtraData.set(state, MODEL_ALPHA_KEY, OptionalInt.of(ARGB.as8BitChannel((float) alpha)));
+        }
+
         return state;
     }
 
