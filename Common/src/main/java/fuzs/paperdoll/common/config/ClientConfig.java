@@ -23,6 +23,9 @@ public class ClientConfig implements ConfigCore {
     public boolean firstPersonOnly = true;
     @Config(description = "Define how the paper doll head is allowed to rotate while moving around.")
     public final HeadMovement headMovement = new HeadMovement();
+    @Config(description = "Control the alpha value used when rendering the paper doll display.")
+    @Config.DoubleRange(min = 0.05, max = 1.0)
+    public double modelTransparency = 1.0;
 
     public boolean isAlwaysDisplayed() {
         return this.displayTime == 0;
