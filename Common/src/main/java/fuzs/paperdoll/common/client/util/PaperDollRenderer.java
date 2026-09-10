@@ -1,17 +1,26 @@
 package fuzs.paperdoll.common.client.util;
 
+import fuzs.paperdoll.common.PaperDoll;
 import fuzs.paperdoll.common.client.handler.PaperDollHandler;
+import fuzs.paperdoll.common.config.ClientConfig;
+import fuzs.puzzleslib.common.api.client.renderer.v1.RenderStateExtraData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
+import net.minecraft.util.ARGB;
+import net.minecraft.util.LightCoordsUtil;
 import net.minecraft.util.Mth;
+import net.minecraft.util.context.ContextKey;
 import net.minecraft.world.entity.LivingEntity;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
+import java.util.OptionalInt;
+
 public class PaperDollRenderer {
+    public static final ContextKey<OptionalInt> MODEL_ALPHA_KEY = new ContextKey<>(PaperDoll.id("model_alpha"));
 
     /**
      * @see net.minecraft.client.gui.screens.inventory.InventoryScreen#extractEntityInInventoryFollowsMouse(GuiGraphicsExtractor,
@@ -21,7 +30,7 @@ public class PaperDollRenderer {
         Quaternionf rotation = new Quaternionf().rotateZ(Mth.PI);
         Quaternionf overrideCameraAngle = new Quaternionf().rotateX(15.0F * Mth.DEG_TO_RAD);
         rotation.mul(overrideCameraAngle);
-        LivingEntityRenderState state = extractRenderState(livingEntity, partialTick);
+        LivingEntityRenderState state = extractCustomRenderState(livingEntity, partialTick);
         state.bodyRot = 180.0F + PaperDollHandler.getDefaultRotationDegrees();
         state.xRot = PaperDollHandler.getEntityXRot(state);
         state.yRot = PaperDollHandler.getEntityYRot(partialTick);
@@ -32,18 +41,24 @@ public class PaperDollRenderer {
         guiGraphics.entity(state, scale, vector3f, rotation, overrideCameraAngle, x1, y1, x2, y2);
     }
 
+    private static LivingEntityRenderState extractCustomRenderState(LivingEntity livingEntity, float partialTick) {
+        LivingEntityRenderState state = extractRenderState(livingEntity, partialTick);
+        state.lightCoords = LightCoordsUtil.FULL_BRIGHT;
+        float modelAlpha = (float) PaperDoll.CONFIG.get(ClientConfig.class).modelTransparency;
+        RenderStateExtraData.set(state, MODEL_ALPHA_KEY, OptionalInt.of(ARGB.as8BitChannel(modelAlpha)));
+        return state;
+    }
+
     /**
      * @see net.minecraft.client.gui.screens.inventory.InventoryScreen#extractRenderState(LivingEntity)
      */
     private static LivingEntityRenderState extractRenderState(LivingEntity livingEntity, float partialTick) {
         EntityRenderDispatcher entityRenderDispatcher = Minecraft.getInstance().getEntityRenderDispatcher();
         EntityRenderer<? super LivingEntity, ?> entityRenderer = entityRenderDispatcher.getRenderer(livingEntity);
-        LivingEntityRenderState livingEntityRenderState = (LivingEntityRenderState) entityRenderer.createRenderState(
-                livingEntity,
+        LivingEntityRenderState state = (LivingEntityRenderState) entityRenderer.createRenderState(livingEntity,
                 partialTick);
-        livingEntityRenderState.lightCoords = 15728880;
-        livingEntityRenderState.shadowPieces.clear();
-        livingEntityRenderState.outlineColor = 0;
-        return livingEntityRenderState;
+        state.shadowPieces.clear();
+        state.outlineColor = 0;
+        return state;
     }
 }

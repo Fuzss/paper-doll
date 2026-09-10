@@ -5,3 +5,9 @@ plugins {
 dependencies {
     modCompileOnlyApi(sharedLibs.puzzleslib.common)
 }
+
+multiloader {
+    mixins {
+        clientMixin("SubmitNodeCollectionMixin")
+    }
+}
