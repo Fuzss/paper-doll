@@ -3,7 +3,7 @@ package fuzs.paperdoll.common.client.util;
 import fuzs.paperdoll.common.PaperDoll;
 import fuzs.paperdoll.common.client.handler.PaperDollHandler;
 import fuzs.paperdoll.common.config.ClientConfig;
-import fuzs.puzzleslib.common.api.client.renderer.v1.RenderStateExtraData;
+import fuzs.puzzleslib.common.api.client.renderer.v2.RenderStateExtraData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;

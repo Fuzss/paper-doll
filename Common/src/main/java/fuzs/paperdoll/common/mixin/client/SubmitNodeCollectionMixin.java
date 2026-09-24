@@ -2,7 +2,7 @@ package fuzs.paperdoll.common.mixin.client;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import fuzs.paperdoll.common.client.util.PaperDollRenderer;
-import fuzs.puzzleslib.common.api.client.renderer.v1.RenderStateExtraData;
+import fuzs.puzzleslib.common.api.client.renderer.v2.RenderStateExtraData;
 import net.minecraft.client.renderer.SubmitNodeCollection;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.client.renderer.rendertype.RenderSetup;
@@ -24,7 +24,7 @@ abstract class SubmitNodeCollectionMixin {
             OptionalInt alpha = RenderStateExtraData.getOrDefault(entityRenderState,
                     PaperDollRenderer.MODEL_ALPHA_KEY,
                     OptionalInt.empty());
-            if (alpha.isPresent() && renderType.state.pipeline.getColorTargetState().blendFunction().isEmpty()) {
+            if (alpha.isPresent() && !renderType.hasBlending()) {
                 if (renderType.state.textures.containsKey("Sampler0")) {
                     RenderSetup.TextureBinding textureBinding = renderType.state.textures.get("Sampler0");
                     return RenderTypes.entityTranslucent(textureBinding.location());
